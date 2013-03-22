@@ -61,12 +61,13 @@ SEXP boundaryFixed(SEXP h, SEXP hEnv,
   int i, j, k;
   double *out;
   double *wald;
+  size_t outSize = 1000000;
   int nOut = 4+mvz;
   int mWald = mz*2;
   int nWald = 4+mvz;
 
-  out = (double *) R_alloc(100000, sizeof(double));
-  wald = (double *) R_alloc(mWald*nWald, sizeof(double));
+  out = (double *) Calloc(outSize, double);
+  wald = (double *) Calloc(mWald*nWald, double);
   int mOut = 0;
   for (i = 0; i < mz; i++) {
     int roots_n;
@@ -106,6 +107,10 @@ SEXP boundaryFixed(SEXP h, SEXP hEnv,
           sol = bisect(hFunc,
                        roots_range[r*nRoots_range],
                        roots_range[r*nRoots_range + 1]);
+          if (mOut*nOut + 4 + mvz >= outSize) {
+            outSize *= 2;
+            out = (double *) Realloc(out, outSize, double);
+          }
           out[mOut*nOut] = i + 1;
           out[mOut*nOut + 1] = REAL(targetValue)[j];
           out[mOut*nOut + 2] = roots_n;
