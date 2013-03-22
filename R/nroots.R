@@ -1,6 +1,6 @@
 nroots <-
-function(fn,x){
-	#Initialize Variables
+  function(fn,x) {
+    ## Initialize Variables
 	fn1 <- function(x){fn(x,...)}
 	a <- min(x)
 	b <- max(x)
@@ -10,7 +10,7 @@ function(fn,x){
 	n <- 0
 	Ans <- 0
 	
-	#Search Solutions
+    ## Search Solutions
 	index.root <- which(fn(x)==0)
 	index.neg <- which(fn(x)<0)
 	index.pos <- which(fn(x)>0)
@@ -25,5 +25,6 @@ function(fn,x){
 	n <- length(index)
 	sol <- matrix(c(x[index-1],x[index],fn(x)[index-1],fn(x)[index]),ncol=4,nrow=n,byrow=FALSE,
 	              dimnames=list(rep("Interval",n),c("x.lower","x.upper","y.lower","y.upper")))
-	list(n=n,position=index,range=sol)}
+	list(n=n,position=index,range=sol)
+  }
 
