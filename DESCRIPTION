@@ -7,7 +7,7 @@ Date: 2012-02-15
 Author: Boxuan Cui <cui@math.umass.edu>, Daeyoung Kim <daeyoung@math.umass.edu>
 Maintainer: Boxuan Cui <cui@math.umass.edu>
 Description: A collection of R functions for visualizing the targeted likelihood confidence regions (intervals) for any function of the parameters in a variety of regular parametric models.
-Depends: MASS, nlme
+Depends: MASS, multicore, nlme
 License: GPL (>=2)
 Lazyload: yes
 Packaged: 2012-02-16 00:16:18 UTC; Scoriger
