@@ -7,11 +7,8 @@ boundaryMulti <-
     is.whole <- function(value) { floor(value)==value }
 
     Model <- eval(call(model, y, fit, cov))
-    input <- Model$input
+    MLE <- Model$input$MLE
     if (is.null(cov)){cov <- Model$cov}
-    H <- Model$H
-    MLE <- input$MLE
-
     n <- length(y)
     p <- length(MLE)
     e <- eigen(cov)
@@ -20,13 +17,10 @@ boundaryMulti <-
     if (target=="ratio") { critvalue <- -2*log(targetvalue) }
     if (target=="customized") { critvalue <- cvalue }
 
-    boundaryMini <- function(idx, BB) {
-      Model <- eval(call(model, y, fit, cov))
+    boundaryMini <- function(idx, BB, Model) {
       input <- Model$input
-      if (is.null(cov)){cov <- Model$cov}
-      H <- Model$H
-      MLE <- input$MLE
-
+      H <- function(epsilon,input,VZ,cstar) { Model$H(epsilon,input,VZ,cstar) }
+      MLE <- Model$input$MLE
       MLE <- matrix(MLE, 1, length(MLE))
       colnames(MLE) <- paste("MLE", 1:p)
       soltype <- matrix(0, length(targetvalue), 4)
@@ -51,7 +45,9 @@ boundaryMulti <-
                               paste("ray.MLE", 1:p))
       return(list(output=output, out_wald=out_wald, soltype=soltype,z=z))
     }
-    out_b <- mclapply(1:4, boundaryMini, B/4)
+    n.cores <- detectCores()
+    out_b <- mclapply(1:n.cores, boundaryMini, as.integer(B/n.cores), Model,
+                      mc.cores=n.cores)
     output <- do.call(rbind, lapply(out_b, function(l) {l$output}))
     out_wald <- do.call(rbind, lapply(out_b, function(l) {l$out_wald}))
     soltype <- do.call(rbind, lapply(out_b, function(l) {l$soltype}))
