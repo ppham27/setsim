@@ -18,6 +18,7 @@ boundaryMulti <-
     if (target=="customized") { critvalue <- cvalue }
 
     boundaryMini <- function(idx, BB, Model) {
+      library(MASS)
       input <- Model$input
       H <- function(epsilon,input,VZ,cstar) { Model$H(epsilon,input,VZ,cstar) }
       MLE <- Model$input$MLE
@@ -46,8 +47,12 @@ boundaryMulti <-
       return(list(output=output, out_wald=out_wald, soltype=soltype,z=z))
     }
     n.cores <- detectCores()
-    out_b <- mclapply(1:n.cores, boundaryMini, as.integer(B/n.cores), Model,
-                      mc.cores=n.cores)
+    ## out_b <- mclapply(1:n.cores, boundaryMini, as.integer(B/n.cores), Model,
+    ##                   mc.cores=n.cores)
+    cl <- makeCluster(n.cores)
+    out_b <- parLapply(cl, 1:n.cores, boundaryMini,
+                       as.integer(B/n.cores), Model)
+    stopCluster(cl)
     output <- do.call(rbind, lapply(out_b, function(l) {l$output}))
     out_wald <- do.call(rbind, lapply(out_b, function(l) {l$out_wald}))
     soltype <- do.call(rbind, lapply(out_b, function(l) {l$soltype}))
