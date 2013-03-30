@@ -1,6 +1,7 @@
 #include <R.h>
 #include <Rinternals.h>
 #include <Rmath.h>
+#include <R_ext/BLAS.h>
 
 #include "boundary.h"
 
@@ -163,6 +164,8 @@ SEXP boundaryFixed(SEXP h, SEXP hEnv,
   memcpy(REAL(wald_sexp), wald, sizeof(double)*mWald*nWald);
   SET_VECTOR_ELT(output, 0, out_sexp);
   SET_VECTOR_ELT(output, 1, wald_sexp);
+  Free(out);
+  Free(wald);
   UNPROTECT(10);
   return output;
 }
