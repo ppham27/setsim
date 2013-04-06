@@ -53,18 +53,20 @@ SEXP boundaryFixed(SEXP h, SEXP hEnv,
   roots_position = (int *) R_alloc(nhValues, sizeof(int));
   roots_range = (double *) R_alloc(nhValues*nRoots_range, sizeof(double));
   
-  double a, zSquared;
-  int i, j, k;
+  /* allocate output */
   double *out;
   double *wald;
   size_t outSize = 1000000;
   int nOut = 4+mvz;
   int mWald = mz*2;
   int nWald = 4+mvz;
-
   out = (double *) Calloc(outSize, double);
   wald = (double *) Calloc(mWald*nWald, double);
   int mOut = 0;
+
+  double sol_w;
+  double a, zSquared, sol;
+  int i, j, k;
   for (i = 0; i < mz; i++) {
     /* start calculations */
     int roots_n;
@@ -97,13 +99,11 @@ SEXP boundaryFixed(SEXP h, SEXP hEnv,
       if (roots_n == 0) {
         REAL(solType)[j + mSolType] += 1;
       } else {
-        double sol;
-
         for (int r = 0; r < roots_n; r++) {
           sol = bisect(hFunc,
                        roots_range[r*nRoots_range],
                        roots_range[r*nRoots_range + 1]);
-          if (mOut*nOut + 4 + mvz >= outSize) {
+          if (mOut*nOut + nOut >= outSize) {
             outSize *= 2;
             out = (double *) Realloc(out, outSize, double);
           }
@@ -130,7 +130,7 @@ SEXP boundaryFixed(SEXP h, SEXP hEnv,
       }
     }
     /* 3.841459 == qchisq(0.95, 1) */
-    double sol_w = sqrt(3.841459/zSquared);
+    sol_w = sqrt(3.841459/zSquared);
     wald[2*i*nWald] = i + 1;
     wald[2*i*nWald + 1] = REAL(targetValue)[j-1];
     wald[2*i*nWald + 2] = roots_n;

@@ -1,5 +1,17 @@
 #include "setsim.h"
 
+/* get the list element named str, or return NULL */
+int getListIndex(SEXP list, const char *str) {
+  SEXP names = getAttrib(list, R_NamesSymbol);  
+  for (int i = 0; i < length(list); i++) {
+    if(strcmp(CHAR(STRING_ELT(names, i)), str) == 0) {
+      return i;
+    }
+  }
+  Rprintf("Error: %s not found in list\n", str);
+  return -1;
+}
+
 double * calculateVZMatrix(int mv, int nv, double *v,
                            int mz, int nz, double *z) {
   double *c;

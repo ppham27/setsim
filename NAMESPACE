@@ -3,4 +3,4 @@
 
 # Export all names
 useDynLib(setsim)
-exportPattern(".")
+exportPattern("^[^(testC)]$")

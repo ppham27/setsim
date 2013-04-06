@@ -16,6 +16,17 @@ typedef struct {
   SEXP fcall;
 } hFunction;
 
+typedef struct {
+  SEXP hLik;
+  SEXP env;
+  SEXP y;
+  SEXP X;
+  SEXP mle;
+  SEXP fcall;
+} hLikFunction;
+
+int getListIndex(SEXP list, const char *str);
+
 double * calculateVZMatrix(int mv, int nv, double *v,
                            int mz, int nz, double *z);
 

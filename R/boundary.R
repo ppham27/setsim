@@ -4,11 +4,10 @@ boundary <-
     if (missing(cov)) { cov <- NULL }
     if (missing(B)) { B <- NULL }
     if (missing(max_B)) { max_B <- 1000 }
-    is.whole <- function(value) { floor(value)==value }
 
     Model <- eval(call(model, y, fit, cov))
     MLE <- Model$input$MLE
-    if (is.null(cov)){cov <- Model$cov}
+    if (is.null(cov)) { cov <- Model$cov }
     n <- length(y)
     p <- length(MLE)
     e <- eigen(cov)
@@ -18,6 +17,7 @@ boundary <-
     if (target=="customized") { critvalue <- cvalue }
 
     boundaryMini <- function(idx, BB, Model) {
+      ## returns output, out_wald, soltype, and z
       input <- Model$input
       H <- function(epsilon,input,VZ,cstar) { Model$H(epsilon,input,VZ,cstar) }
       MLE <- Model$input$MLE
@@ -29,8 +29,7 @@ boundary <-
       
       z <- mvrnorm(BB, rep(0, p), diag(1, nrow = p, ncol = p))
       colnames(z) <- paste("ray.z", 1:p)
-      norm <- 0
-      for (i in 1:dim(z)[1]) { norm[i] <- sqrt(sum(z[i, ]^2)) }
+      norm <- apply(z, 1, function(r) { sqrt(sum(r*r)) })
       z <- z[order(norm),]
       out_c <- .Call("boundaryFixed",
                      H, environment(H),
