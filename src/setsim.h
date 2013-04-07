@@ -1,6 +1,8 @@
 #ifndef SETSIM_H_
 #define SETSIM_H_
 
+#include <unistd.h>
+
 #include <R.h>
 #include <Rinternals.h>
 #include <Rmath.h>

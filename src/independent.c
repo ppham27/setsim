@@ -153,11 +153,11 @@ SEXP independentFixed(SEXP h, SEXP hEnv,
       wald[(2*i+1)*nWald + 4 + j] = REAL(mle)[j] + sol_w*REAL(hFunc -> vz)[j];
     }    
     /* keep track of status */
-    if ((i+1) % 200 == 0) {
-      if (i != 0 ) { Rprintf("Generated %d rays.\n", i+1); }
+    if ((i+1) % 200 == 0 && i != 0 && i != mz - 1) {
+      Rprintf("worker pid=%d generated %d rays\n", (int) getpid(), i+1);
     }
   }
-  Rprintf("Done!\n");
+  Rprintf("Worker pid=%d is done generating %d rays!\n", (int) getpid(), i);
   SEXP output;
   SEXP out_sexp;
   SEXP wald_sexp;  
