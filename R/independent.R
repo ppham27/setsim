@@ -1,7 +1,15 @@
-independent <- function(model,y,fit,cov,B,max_B) {
+independent <- function(model, y, fit, cov,B, max_B, n.splits) {
   if (missing(cov)) { cov <- NULL }
   if (missing(B)) { B <- NULL }
   if (missing(max_B)) { max_B <- 1000 }
+  if (missing(n.splits)) {
+    n.cores <- detectCores()
+    if (n.cores >= 4) {
+      n.splits <- as.integer(n.cores/2)
+    } else {
+      n.splits <- n.cores
+    }
+  }
 
   Model <- eval(call(model, y, fit, cov))
   MLE <- Model$input$MLE
@@ -46,12 +54,6 @@ independent <- function(model,y,fit,cov,B,max_B) {
     return(list(output=output, out_wald=out_wald, soltype=soltype, z=z))
   }
   
-  n.cores <- detectCores()
-  if (n.cores >= 4) {
-    n.splits <- as.integer(n.cores/2)
-  } else {
-    n.splits <- n.cores
-  }
   cl <- makeCluster(n.splits, outfile="")
   clusterCall(cl, function() {
     library(MASS)
@@ -104,7 +106,7 @@ independent <- function(model,y,fit,cov,B,max_B) {
                                  by=list(level=soltype[,1]),
                                  sum))
   z <- do.call(rbind, lapply(out_b, function(l) {l$z}))
-  print("All Done!")
+  print(paste(nrow(z),"rays generated.","All Done!"))
 
   ## process calculations
   wald.num <- matrix(c(MLE-qnorm(0.975)*sqrt(diag(cov)), MLE+qnorm(0.975)*sqrt(diag(cov))),nrow=p,ncol=2,dimnames=list(paste("MLE",1:p),c("Lower Bound","Upper Bound")))

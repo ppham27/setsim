@@ -18,9 +18,9 @@ License: \tab GPL (>=2)\cr
 LazyLoad: \tab yes\cr
 }}
 \author{
-Boxuan Cui <cui@math.umass.edu>, Daeyoung Kim <daeyoung@math.umass.edu>
+Boxuan Cui <cui@math.umass.edu>, Philip Pham <philip.pham2@gmail.com>, Daeyoung Kim <daeyoung@math.umass.edu>
 
-Maintainer: Boxuan Cui <cui@math.umass.edu>
+Maintainer: Boxuan Cui <cui@math.umass.edu>, Philip Pham <philip.pham2@gmail.com>
 }
 
 \references{
