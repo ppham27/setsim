@@ -53,7 +53,6 @@ independent <- function(model,y,fit,cov,B,max_B) {
     n.splits <- n.cores
   }
   cl <- makeCluster(n.splits, outfile="")
-  setDefaultCluster(cl)
   clusterCall(cl, function() {
     library(MASS)
   })

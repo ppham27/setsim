@@ -1,4 +1,4 @@
-_testC <- function() {
+testC <- function() {
   data(data.poisson)
   Device <- data.poisson$Device
   DataPlan <- data.poisson$DataPlan

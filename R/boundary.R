@@ -52,7 +52,6 @@ boundary <-
     ## out_b <- mclapply(1:n.cores, boundaryMini, as.integer(B/n.cores), Model,
     ##                   mc.cores=n.cores)
     cl <- makeCluster(n.splits, outfile="")
-    setDefaultCluster(cl)
     clusterCall(cl, function() {
       library(MASS)
     })
