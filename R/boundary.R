@@ -22,7 +22,7 @@ boundary <-
     V <- e$vectors %*% diag(sqrt(e$values)) %*% t(e$vectors)
     if (target=="level") { critvalue <- qchisq(targetvalue,p) }
     if (target=="ratio") { critvalue <- -2*log(targetvalue) }
-    if (target=="customized") { critvalue <- cvalue }
+    if (target=="customized") { critvalue <- targetvalue }
 
     boundaryMini <- function(idx, BB, Model) {
       ## returns output, out_wald, soltype, and z
@@ -110,7 +110,7 @@ boundary <-
     ## process calculations
     conv.waldnum <- matrix(c(MLE-qnorm(0.975)*sqrt(diag(cov)),MLE+qnorm(0.975)*sqrt(diag(cov))),p,2,dimnames=list(paste("MLE",1:p),c("Lower Bound","Upper Bound")))
     conv.waldsim <- matrix(c(apply(out_wald[,5:(p+4)],2,min),apply(out_wald[,5:(p+4)],2,max)),p,2,dimnames=list(paste("MLE",1:p),c("Lower Bound","Upper Bound")))
-    if (target=="level" || target=="customized") {
+    if (target=="level") {
       wald.num <- matrix(NA,length(targetvalue),2*p+1)
       lik.sim <- matrix(NA, length(targetvalue), 2*p+1)
       for (i in 1:length(targetvalue)) {
@@ -131,7 +131,7 @@ boundary <-
            WaldBoundary.sample = out_wald,
            ray.z = z, numWald.interval = wald.num,
            simLik.interval = lik.sim, convnumWald = conv.waldnum, convsimuWald = conv.waldsim)
-    } else if (target=="ratio") {
+    } else if (target=="ratio" || target=="customized") {
       list(MLE = MLE, diagnosis = soltype, boundary.sample = output,
            boundaryWald.sample = out_wald, ray.z = z,
            convnumWald = conv.waldnum, convsimuWald = conv.waldsim)
