@@ -7,6 +7,6 @@ Daeyoung Kim and Bruce G. Lindsay. "Using confidence distribution sampling to vi
 
 Available at: http://works.bepress.com/daeyoung_kim/1
 
-Author: Boxuan Cui <cui@math.umass.edu>, Philip Pham <philip.pham2@gmail.com>, Daeyoung Kim <daeyoung@math.umass.edu>
+Author: Boxuan Cui <boxuancui@gmail.com>, Philip Pham <philip.pham2@gmail.com>, Daeyoung Kim <daeyoung@math.umass.edu>
 
-Maintainer: Boxuan Cui <cui@math.umass.edu>, Philip Pham <philip.pham2@gmail.com>
+Maintainer: Boxuan Cui <boxuancui@gmail.com>, Philip Pham <philip.pham2@gmail.com>
