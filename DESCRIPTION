@@ -4,10 +4,10 @@ Title: Software tool for the visualization of confidence regions in
         statistical models
 Version: 1.2.0
 Date: 2013-04-01
-Author: Boxuan Cui <cui@math.umass.edu>, Philip Pham <philip.pham2@gmail.com>, Daeyoung Kim <daeyoung@math.umass.edu>
-Maintainer: Boxuan Cui <cui@math.umass.edu>, Philip Pham <philip.pham2@gmail.com>
+Author: Boxuan Cui <boxuancui@gmail.com>, Philip Pham <philip.pham2@gmail.com>, Daeyoung Kim <daeyoung@math.umass.edu>
+Maintainer: Boxuan Cui <boxuancui@gmail.com>, Philip Pham <philip.pham2@gmail.com>
 Description: A collection of R functions for visualizing the targeted likelihood confidence regions (intervals) for any function of the parameters in a variety of regular parametric models.
 Depends: R (>= 2.14.0), MASS, nlme, parallel
 License: GPL (>=2)
 Lazyload: yes
-Packaged: 2012-02-16 00:16:18 UTC; Scoriger
+Packaged: 2012-02-16 00:16:18 UTC
