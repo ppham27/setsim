@@ -66,11 +66,11 @@ out_b$convsim   # out_b$convsim is equivalent to out_b$convsimWald
 ########################################################
 par(mfrow=c(2,2))
 plot(out_b$bound[,6],out_b$bound[,7],xlab=expression(beta[Def]),ylab=expression(beta[Vic]),cex=0.5)
-points(out_b$MLE[2],out_b$MLE[3],pch=16,col="red",cex=1.5)
+points(out_b$EST[2],out_b$EST[3],pch=16,col="red",cex=1.5)
 plot(out_b$bound[,7],out_b$bound[,8],xlab=expression(beta[Vic]),ylab=expression(beta[Pen]),cex=0.5)
-points(out_b$MLE[3],out_b$MLE[4],pch=16,col="red",cex=1.5)
+points(out_b$EST[3],out_b$EST[4],pch=16,col="red",cex=1.5)
 plot(out_b$bound[,6],out_b$bound[,8],xlab=expression(beta[Def]),ylab=expression(beta[Def*Vic]),cex=0.5)
-points(out_b$MLE[2],out_b$MLE[4],pch=16,col="red",cex=1.5)
+points(out_b$EST[2],out_b$EST[4],pch=16,col="red",cex=1.5)
 plot(out_b$bound[,5],out_b$bound[,8],xlab=expression(beta[Def*Pen]),ylab=expression(beta[Vic*Pen]),cex=0.5)
-points(out_b$MLE[1],out_b$MLE[4],pch=16,col="red",cex=1.5)
+points(out_b$EST[1],out_b$EST[4],pch=16,col="red",cex=1.5)
 }}

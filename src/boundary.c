@@ -7,7 +7,7 @@ SEXP boundaryFixed(SEXP h, SEXP hEnv,
                    SEXP critValue,
                    SEXP targetValue,
                    SEXP input,
-                   SEXP mle,
+                   SEXP est,
                    SEXP solType) {
   int mv = INTEGER(getAttrib(v, R_DimSymbol))[0];
   int nv = INTEGER(getAttrib(v, R_DimSymbol))[1];
@@ -112,7 +112,7 @@ SEXP boundaryFixed(SEXP h, SEXP hEnv,
           out[mOut*nOut + 2] = roots_n;
           out[mOut*nOut + 3] = sol;
           for (int k = 0; k < mvz; k++) {
-            out[mOut*nOut + 4 + k] = REAL(mle)[k] + sol*REAL(hFunc -> vz)[k];
+            out[mOut*nOut + 4 + k] = REAL(est)[k] + sol*REAL(hFunc -> vz)[k];
           }
           mOut++;
         }
@@ -136,14 +136,14 @@ SEXP boundaryFixed(SEXP h, SEXP hEnv,
     wald[2*i*nWald + 2] = roots_n;
     wald[2*i*nWald + 3] = -sol_w;
     for (int k = 0; k < mvz; k++) {
-      wald[2*i*nWald + 4 + k] = REAL(mle)[k] - sol_w*REAL(hFunc -> vz)[k];
+      wald[2*i*nWald + 4 + k] = REAL(est)[k] - sol_w*REAL(hFunc -> vz)[k];
     }
     wald[(2*i+1)*nWald] = i + 1;
     wald[(2*i+1)*nWald + 1] = REAL(targetValue)[j-1];
     wald[(2*i+1)*nWald + 2] = roots_n;
     wald[(2*i+1)*nWald + 3] = sol_w;
     for (int k = 0; k < mvz; k++) {
-      wald[(2*i+1)*nWald + 4 + k] = REAL(mle)[k] + sol_w*REAL(hFunc -> vz)[k];
+      wald[(2*i+1)*nWald + 4 + k] = REAL(est)[k] + sol_w*REAL(hFunc -> vz)[k];
     }
     /* keep track of status */
     if ((i+1) % 200 == 0 && i != 0 && i != mz - 1) {

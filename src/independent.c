@@ -8,7 +8,7 @@ SEXP independentFixed(SEXP h, SEXP hEnv,
                       SEXP cstar,
                       SEXP targetValue,
                       SEXP input,
-                      SEXP mle,
+                      SEXP est,
                       SEXP solType) {
   int mv = INTEGER(getAttrib(v, R_DimSymbol))[0];
   int nv = INTEGER(getAttrib(v, R_DimSymbol))[1];
@@ -47,12 +47,12 @@ SEXP independentFixed(SEXP h, SEXP hEnv,
   PROTECT(hLikFunc -> env = hLikEnv);
   PROTECT(hLikFunc -> y = VECTOR_ELT(input, getListIndex(input,"y")));
   PROTECT(hLikFunc -> X = VECTOR_ELT(input, getListIndex(input,"X")));
-  PROTECT(hLikFunc -> mle = allocVector(REALSXP, LENGTH(mle)));
-  memcpy(REAL(hLikFunc -> mle), REAL(mle), LENGTH(mle)*sizeof(double));
+  PROTECT(hLikFunc -> est = allocVector(REALSXP, LENGTH(est)));
+  memcpy(REAL(hLikFunc -> est), REAL(est), LENGTH(est)*sizeof(double));
   PROTECT(hLikFunc -> fcall = lang4(hLikFunc -> hLik,
                                     hLikFunc -> y,
                                     hLikFunc -> X,
-                                    hLikFunc -> mle));
+                                    hLikFunc -> est));
   /* initiate values for nroots function */
   double *epsilon;
   double *hValues;
@@ -121,7 +121,7 @@ SEXP independentFixed(SEXP h, SEXP hEnv,
         out[mOut*nOut + 2] = roots_n;
         out[mOut*nOut + 3] = sol;
         for (j = 0; j < mvz; j++) {
-          REAL(hLikFunc -> mle)[j] = out[mOut*nOut + 4 + j] = REAL(mle)[j] + sol*REAL(hFunc -> vz)[j]; 
+          REAL(hLikFunc -> est)[j] = out[mOut*nOut + 4 + j] = REAL(est)[j] + sol*REAL(hFunc -> vz)[j]; 
         }
         out[mOut*nOut + nOut - 1] = REAL(eval(hLikFunc -> fcall, hLikFunc -> env))[0];
         mOut++;
@@ -143,14 +143,14 @@ SEXP independentFixed(SEXP h, SEXP hEnv,
     wald[2*i*nWald + 2] = roots_n;
     wald[2*i*nWald + 3] = -sol_w;
     for (j = 0; j < mvz; j++) {
-      wald[2*i*nWald + 4 + j] = REAL(mle)[j] - sol_w*REAL(hFunc -> vz)[j];
+      wald[2*i*nWald + 4 + j] = REAL(est)[j] - sol_w*REAL(hFunc -> vz)[j];
     }
     wald[(2*i+1)*nWald] = i + 1;
     wald[(2*i+1)*nWald + 1] = REAL(cstar)[i];
     wald[(2*i+1)*nWald + 2] = roots_n;
     wald[(2*i+1)*nWald + 3] = sol_w;
     for (j = 0; j < mvz; j++) {
-      wald[(2*i+1)*nWald + 4 + j] = REAL(mle)[j] + sol_w*REAL(hFunc -> vz)[j];
+      wald[(2*i+1)*nWald + 4 + j] = REAL(est)[j] + sol_w*REAL(hFunc -> vz)[j];
     }    
     /* keep track of status */
     if ((i+1) % 200 == 0 && i != 0 && i != mz - 1) {

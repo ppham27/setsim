@@ -23,7 +23,7 @@ typedef struct {
   SEXP env;
   SEXP y;
   SEXP X;
-  SEXP mle;
+  SEXP est;
   SEXP fcall;
 } hLikFunction;
 
@@ -48,7 +48,7 @@ SEXP boundaryFixed(SEXP h, SEXP hEnv,
                    SEXP critValue,
                    SEXP targetValue,
                    SEXP input,
-                   SEXP mle,
+                   SEXP est,
                    SEXP solType);
 
 

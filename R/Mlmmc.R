@@ -5,8 +5,8 @@ Mlmmc <-
     groups <- as.character(fit$groups[[1]])
     group <- factor(groups,ordered=FALSE)
     n.group <- length(levels(group))
-    MLE <- c(diag(getVarCov(fit)),fit$sigma^2)
-    p <- length(MLE)
+    EST <- c(diag(getVarCov(fit)),fit$sigma^2)
+    p <- length(EST)
     if (is.null(cov)){cov <- fit$apVar}
     covi <- vector("list", n.group)
     rbind(covi)
@@ -22,9 +22,9 @@ Mlmmc <-
     lik1 <- 0
     lik2 <- 0
     D <- 0
-    H.lik <- function(yi, Xi, MLE) {
+    H.lik <- function(yi, Xi, EST) {
       for (j in 1:n.group) {
-        covi[[j]] <- as.matrix(as.numeric(Zi[[j]])) %*% as.matrix(MLE[1:p-1]) %*% t(as.matrix(as.numeric(Zi[[j]])))+diag(MLE[p],length(yi[[j]]),length(yi[[j]]))
+        covi[[j]] <- as.matrix(as.numeric(Zi[[j]])) %*% as.matrix(EST[1:p-1]) %*% t(as.matrix(as.numeric(Zi[[j]])))+diag(EST[p],length(yi[[j]]),length(yi[[j]]))
         D[j] <- log(det(covi[[j]]))
         ri1[[j]] <- t(as.matrix(Xi[[j]])) %*% solve(covi[[j]]) %*% as.matrix(Xi[[j]])
         ri2[[j]] <- t(as.matrix(Xi[[j]])) %*% solve(covi[[j]]) %*% yi[[j]]
@@ -38,9 +38,9 @@ Mlmmc <-
       lik
     }
     max_loglik <- fit$logLik
-    input <- list(y=yi,X=Xi,MLE=MLE,max_loglik=max_loglik)
+    input <- list(y=yi,X=Xi,EST=EST,max_loglik=max_loglik)
     H <- function(epsilon,input,VZ,cstar){
-      H.lik(y=yi,X=Xi,MLE=as.numeric(MLE+epsilon*VZ))-max_loglik+0.5*cstar
+      H.lik(y=yi,X=Xi,EST=as.numeric(EST+epsilon*VZ))-max_loglik+0.5*cstar
     }
     list(cov=cov,input=input,H=H,H.lik=H.lik)
   }

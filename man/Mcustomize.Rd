@@ -18,7 +18,7 @@ Mcustomize(y, fit, cov)
 }
 
 \details{
-\code{fit} must be a list. It can be done by \code{\link{list}} function. The names must exactly be ``MLE'', ``X'' and ``lik''. \code{lik} in \code{fit} must be the \code{\link{expression}} class.
+\code{fit} must be a list. It can be done by \code{\link{list}} function. The names must exactly be ``EST'', ``X'' and ``lik''. \code{lik} in \code{fit} must be the \code{\link{expression}} class.
 }
 
 \examples{
@@ -26,17 +26,16 @@ Mcustomize(y, fit, cov)
 ##########################################################
 ################-----BoundarySampling-----################
 ##########################################################
-library(MASS)
 data(data.poisson)
 Device <- data.poisson$Device
 DataPlan <- data.poisson$DataPlan
 y <- data.poisson$y
 fit.glm <- glm(y ~ (Device+DataPlan), family=poisson)
 X <- model.matrix(fit.glm)
-MLE <- fit.glm$coef
+EST <- fit.glm$coef
 cov <- vcov(fit.glm)
-lik <- expression(MLE \%*\% t(X) \%*\% y - sum(exp(MLE \%*\% t(X)))-sum(lgamma(y+1)))
-fit <- list(MLE=MLE,X=X,lik=lik)
+lik <- expression(EST \%*\% t(X) \%*\% y - sum(exp(EST \%*\% t(X)))-sum(lgamma(y+1)))
+fit <- list(EST=EST,X=X,lik=lik)
 target <- "level"
 targetvalue <- c(0.5,0.9)
 ########################################################
@@ -50,12 +49,10 @@ out_b$convnum   # out_b$convnum is equivalent to out_b$convnumWald
 out_b$convsim   # out_b$convsim is equivalent to out_b$convsimWald
 ########################################################
 par(mfrow=c(2,2))
-plot(out_b$bound[,6],out_b$bound[,7],xlab=expression(beta[Def]),ylab=expression(beta[Vic]),cex=0.5)
-points(out_b$MLE[2],out_b$MLE[3],pch=16,col="red",cex=1.5)
-plot(out_b$bound[,7],out_b$bound[,8],xlab=expression(beta[Vic]),ylab=expression(beta[Pen]),cex=0.5)
-points(out_b$MLE[3],out_b$MLE[4],pch=16,col="red",cex=1.5)
-plot(out_b$bound[,6],out_b$bound[,8],xlab=expression(beta[Def]),ylab=expression(beta[Def*Vic]),cex=0.5)
-points(out_b$MLE[2],out_b$MLE[4],pch=16,col="red",cex=1.5)
-plot(out_b$bound[,5],out_b$bound[,8],xlab=expression(beta[Def*Pen]),ylab=expression(beta[Vic*Pen]),cex=0.5)
-points(out_b$MLE[1],out_b$MLE[4],pch=16,col="red",cex=1.5)
+plot(out_b$bound[,5],out_b$bound[,6],xlab=expression(beta[Def]),ylab=expression(beta[Vic]),cex=0.5)
+points(out_b$EST[1],out_b$EST[2],pch=16,col="red",cex=1.5)
+plot(out_b$bound[,6],out_b$bound[,7],xlab=expression(beta[Vic]),ylab=expression(beta[Pen]),cex=0.5)
+points(out_b$EST[2],out_b$EST[3],pch=16,col="red",cex=1.5)
+plot(out_b$bound[,5],out_b$bound[,7],xlab=expression(beta[Def]),ylab=expression(beta[Def*Vic]),cex=0.5)
+points(out_b$EST[1],out_b$EST[3],pch=16,col="red",cex=1.5)
 }}

@@ -2,17 +2,17 @@ Mgamma <-
   function(y,fit,cov) {
 	n <- length(y)
 	X <- model.matrix(fit)
-    mle_nu <- gamma.shape(fit)$alpha     # the maximum likelihood estimate 
-    MLE <- c(as.vector(fit$coef),as.vector(mle_nu))
-    p <- length(MLE)
+    est_nu <- gamma.shape(fit)$alpha     # the maximum likelihood estimate 
+    EST <- c(as.vector(fit$coef),as.vector(est_nu))
+    p <- length(EST)
     mu <- fit$fitted.values  
-	max_loglik <- sum(-y*mle_nu/mu + (mle_nu-1)*log(y) + mle_nu*log(mle_nu/mu)) - n*lgamma(mle_nu)
-	input <- list(y=y,X=X,MLE=MLE,max_loglik=max_loglik)
+	max_loglik <- sum(-y*est_nu/mu + (est_nu-1)*log(y) + est_nu*log(est_nu/mu)) - n*lgamma(est_nu)
+	input <- list(y=y,X=X,EST=EST,max_loglik=max_loglik)
 	H <- function(epsilon,input,VZ,cstar) {
       if (fit$family$link=="inverse") {
-        mu <- 1/(X %*% (input$MLE[1:p-1]+epsilon*VZ[1:p-1]))
-        if (all(mu>0) & input$MLE[p]+epsilon*VZ[p]>0) {
-          tmp <- input$MLE[p]+epsilon*VZ[p]
+        mu <- 1/(X %*% (input$EST[1:p-1]+epsilon*VZ[1:p-1]))
+        if (all(mu>0) & input$EST[p]+epsilon*VZ[p]>0) {
+          tmp <- input$EST[p]+epsilon*VZ[p]
           sum(-input$y*tmp/mu +
               (tmp-1)*log(input$y) +              
               tmp*log(tmp/mu)) -
@@ -22,8 +22,8 @@ Mgamma <-
           NaN
         }
       } else if (fit$family$link=="log") {
-        mu <- exp(X %*% (input$MLE[1:p-1]+epsilon*VZ[1:p-1]))
-        tmp <- input$MLE[p]+epsilon*VZ[p]
+        mu <- exp(X %*% (input$EST[1:p-1]+epsilon*VZ[1:p-1]))
+        tmp <- input$EST[p]+epsilon*VZ[p]
         sum(-input$y*tmp/mu +
             (tmp-1)*log(input$y) +
             tmp*log(tmp/mu)) -
@@ -31,19 +31,19 @@ Mgamma <-
                 input$max_loglik+0.5*cstar
       }
     }
-    H.lik <- function(y,X,MLE) {
+    H.lik <- function(y,X,EST) {
       if (fit$family$link=="inverse") {
-        mu <- 1/(X %*% MLE[1:p-1])
-        if (all(mu>0) & MLE[p]>0) {
-          sum(-y*MLE[p]/mu + (MLE[p]-1)*log(y) + MLE[p]*log(MLE[p]/mu)) -
-            n*lgamma(MLE[p])
+        mu <- 1/(X %*% EST[1:p-1])
+        if (all(mu>0) & EST[p]>0) {
+          sum(-y*EST[p]/mu + (EST[p]-1)*log(y) + EST[p]*log(EST[p]/mu)) -
+            n*lgamma(EST[p])
         } else {
           NaN
         }
       } else if (fit$family$link=="log") {
-        mu <- exp(X %*% MLE[1:p-1])
-        sum(-y*MLE[p]/mu + (MLE[p]-1)*log(y) + MLE[p]*log(MLE[p]/mu)) -
-          n*lgamma(MLE[p])
+        mu <- exp(X %*% EST[1:p-1])
+        sum(-y*EST[p]/mu + (EST[p]-1)*log(y) + EST[p]*log(EST[p]/mu)) -
+          n*lgamma(EST[p])
       }
     }
     if (is.null(cov)) {
@@ -51,14 +51,14 @@ Mgamma <-
       info_tmp2<-matrix(0,p-1,1)
       if (fit$family$link=="inverse") {
         for (w in 1:n) {
-          info_tmp1 <- info_tmp1 + mle_nu*(mu[w]^2)*(X[w,]%*%t(X[w,]))
+          info_tmp1 <- info_tmp1 + est_nu*(mu[w]^2)*(X[w,]%*%t(X[w,]))
           info_tmp2 <- info_tmp2 + (y[w]-mu[w])*X[w,]
         }
         cov <- solve(rbind(cbind(info_tmp1,info_tmp2),
                            c(info_tmp2,(1/((gamma.shape(fit)$SE)^2)))))
       } else if (fit$family$link=="log") {
         for (w in 1:n){
-          info_tmp1 <- info_tmp1 +  mle_nu*(y[w]/mu[w])*(X[w,]%*%t(X[w,]))
+          info_tmp1 <- info_tmp1 +  est_nu*(y[w]/mu[w])*(X[w,]%*%t(X[w,]))
           info_tmp2 <- info_tmp2 - (y[w]/mu[w]-1)*X[w,]}
         cov <- solve(rbind(cbind(info_tmp1,info_tmp2),
                            c(info_tmp2,(1/((gamma.shape(fit)$SE)^2)))))

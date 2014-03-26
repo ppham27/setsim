@@ -2,7 +2,7 @@ Mlmmf <-
   function (y, fit, cov) {
     n <- length(y)
     X <- model.matrix(fit, fit$data)
-    MLE <- as.vector(fit$coef$fixed)
+    EST <- as.vector(fit$coef$fixed)
     groups <- as.character(fit$groups[[1]])
     group <- factor(groups, ordered = FALSE)
     n.group <- length(levels(group))
@@ -32,12 +32,12 @@ Mlmmf <-
     lik2 <- Reduce("+",like2)
     lik3 <- Reduce("+",like3)
     lik4 <- Reduce("+",like4)
-    input <- list(y=yi,X=Xi,MLE=MLE,max_loglik=max_loglik)
+    input <- list(y=yi,X=Xi,EST=EST,max_loglik=max_loglik)
     H <- function(epsilon,input,VZ,cstar){
-      -0.5*n*log(2*pi)-0.5*sum(D)-0.5*(lik1-lik2 %*% (MLE+epsilon*VZ)-t((MLE+epsilon*VZ)) %*% lik3 + t((MLE+epsilon*VZ)) %*% lik4 %*% ((MLE+epsilon*VZ)))-max_loglik+0.5*cstar
+      -0.5*n*log(2*pi)-0.5*sum(D)-0.5*(lik1-lik2 %*% (EST+epsilon*VZ)-t((EST+epsilon*VZ)) %*% lik3 + t((EST+epsilon*VZ)) %*% lik4 %*% ((EST+epsilon*VZ)))-max_loglik+0.5*cstar
     }
-    H.lik <- function(yi,Xi,MLE) {
-      -0.5*n*log(2*pi)-0.5*sum(D)-0.5*(lik1-lik2 %*% MLE-t(MLE) %*% lik3 + t(MLE) %*% lik4 %*% MLE)
+    H.lik <- function(yi,Xi,EST) {
+      -0.5*n*log(2*pi)-0.5*sum(D)-0.5*(lik1-lik2 %*% EST-t(EST) %*% lik3 + t(EST) %*% lik4 %*% EST)
     }
     list(cov=cov,input=input,H=H,H.lik=H.lik)
   }

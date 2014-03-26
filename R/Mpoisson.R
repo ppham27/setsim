@@ -2,19 +2,19 @@ Mpoisson <-
   function(y,fit,cov) {
 	n <- length(y)
 	X <- model.matrix(fit)
-	MLE <- as.vector(fit$coef)
-	max_loglik <- y %*% X %*% MLE -
-      sum(exp(X %*% MLE)) -
+	EST <- as.vector(fit$coef)
+	max_loglik <- y %*% X %*% EST -
+      sum(exp(X %*% EST)) -
         sum(lgamma(y+1))
-	input <- list(y=y,X=X,MLE=MLE,max_loglik=max_loglik)
+	input <- list(y=y,X=X,EST=EST,max_loglik=max_loglik)
 	H <- function(epsilon,input,VZ,cstar) {
-      y %*% input$X %*% (input$MLE + epsilon * VZ) -
-        sum(exp(input$X %*% (input$MLE + epsilon * VZ))) -
+      y %*% input$X %*% (input$EST + epsilon * VZ) -
+        sum(exp(input$X %*% (input$EST + epsilon * VZ))) -
           sum(lgamma(input$y + 1))-input$max_loglik + 0.5 * cstar
     }
-    H.lik <- function(y,X,MLE){
-      y %*% X %*% MLE -
-        sum(exp(X %*% MLE)) -
+    H.lik <- function(y,X,EST){
+      y %*% X %*% EST -
+        sum(exp(X %*% EST)) -
           sum(lgamma(y+1))
     }
 	if (is.null(cov)){

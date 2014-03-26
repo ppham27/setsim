@@ -4,7 +4,7 @@
 \title{Highest Likelihood Confidence Region}
 
 \description{
-This function generates the highest likelihood confidence interval around MLE for a given parameter. It is recommended to use samples from \code{\link{independent}} sampling methods.
+This function generates the highest likelihood confidence interval around EST for a given parameter. It is recommended to use samples from \code{\link{independent}} sampling methods.
 }
 
 \usage{
@@ -33,7 +33,6 @@ This function serves as an add-on to the independent sampling method.
 
 \examples{
 # run independent sampling method
-library(MASS)
 data(data.poisson)
 Device <- data.poisson$Device
 DataPlan <- data.poisson$DataPlan
@@ -56,11 +55,11 @@ plot(c~conf,type="l",xlab="CR",main="Relationship between c and Confidence Regio
 ##### 3d visualization - Require library(rgl)
 # samples inside the confidence region have blue colors
 # samples outside the confidence region have green colors
-# MLE is red-colored text
+# EST is red-colored text
 library(rgl)
 plot3d(x=Region$ins[,2],y=Region$ins[,3],z=Region$ins[,4],xlab="Device",ylab="DataPlan",zlab="log-likelihood",col="blue",xlim=c(min(Region$out[,2]),max(Region$out[,2])),ylim=c(min(Region$out[,3]),max(Region$out[,3])),zlim=c(min(Region$out[,4]),out_i$max))
 points3d(x=Region$out[,2],y=Region$out[,3],z=Region$out[,4],col="green")
-text3d(x=fit$coef[2],y=fit$coef[3],z=out_i$max,text="MLE",col="red")
+text3d(x=fit$coef[2],y=fit$coef[3],z=out_i$max,text="EST",col="red")
 }
 
 \keyword{LCR}

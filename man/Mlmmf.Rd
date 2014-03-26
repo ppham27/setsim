@@ -24,8 +24,6 @@ Mlmmf(y, fit, cov)
 #############################################################
 ################-----IndependentSampling-----################
 #############################################################
-library(MASS)
-library(nlme)
 y <- Oxide$Thickness
 fit <- lme(Thickness~Wafer,data=Oxide,random=~1|Source,method="ML")
 ########################################################
@@ -38,17 +36,15 @@ out_i$sim    #out_i$sim is equivalent to out_i$simWald.interval
 ########################################################
 par(mfrow=c(2,2))
 plot(out_i$ind[,7]~out_i$ind[,6],xlab=expression(beta[1]),ylab=expression(beta[2]),cex=0.5)
-points(out_i$MLE[2],out_i$MLE[3],pch=16,col="red",cex=1.5)
+points(out_i$EST[2],out_i$EST[3],pch=16,col="red",cex=1.5)
 plot(out_i$ind[,7]~out_i$ind[,5],xlab=expression(beta[0]),ylab=expression(beta[2]),cex=0.5)
-points(out_i$MLE[1],out_i$MLE[3],pch=16,col="red",cex=1.5)
+points(out_i$EST[1],out_i$EST[3],pch=16,col="red",cex=1.5)
 plot(out_i$ind[,6]~out_i$ind[,5],xlab=expression(beta[0]),ylab=expression(beta[1]),cex=0.5)
-points(out_i$MLE[1],out_i$MLE[2],pch=16,col="red",cex=1.5)
+points(out_i$EST[1],out_i$EST[2],pch=16,col="red",cex=1.5)
 
 ##########################################################
 ################-----BoundarySampling-----################
 ##########################################################
-library(MASS)
-library(nlme)
 y <- Oxide$Thickness
 fit <- lme(Thickness~Wafer,data=Oxide,random=~1|Source,method="ML")
 target <- "level"
@@ -65,9 +61,9 @@ out_b$convsim   # out_b$convsim is equivalent to out_b$convsimWald
 ########################################################
 par(mfrow=c(2,2))
 plot(out_b$bound[,7]~out_b$bound[,6],xlab=expression(beta[1]),ylab=expression(beta[2]),cex=0.5)
-points(out_b$MLE[2],out_b$MLE[3],pch=16,col="red",cex=1.5)
+points(out_b$EST[2],out_b$EST[3],pch=16,col="red",cex=1.5)
 plot(out_b$bound[,7]~out_b$bound[,5],xlab=expression(beta[0]),ylab=expression(beta[2]),cex=0.5)
-points(out_b$MLE[1],out_b$MLE[3],pch=16,col="red",cex=1.5)
+points(out_b$EST[1],out_b$EST[3],pch=16,col="red",cex=1.5)
 plot(out_b$bound[,6]~out_b$bound[,5],xlab=expression(beta[0]),ylab=expression(beta[1]),cex=0.5)
-points(out_b$MLE[1],out_b$MLE[2],pch=16,col="red",cex=1.5)
+points(out_b$EST[1],out_b$EST[2],pch=16,col="red",cex=1.5)
 }}
