@@ -19,8 +19,10 @@ independent(model, y, fit, cov, B, max_B, stop_rule)
   \item{B}{number of rays to be generated.}
   \item{max_B}{maximum number of rays to be generated for each
     parameter. Default value is 1000.}
+  \item{lik.var}{Variables to substitue in the likelihood expression}
   \item{stop_rule}{When to stop if B is not specified. This based on the
     covariance matrix?}
+  \item{n.splits}{Number of parallel processes to use.}
 }
 
 \details{

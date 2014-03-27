@@ -1,4 +1,5 @@
-independent <- function(model, y, fit, cov,B, max_B, n.splits,
+independent <- function(model, y, fit, cov, B, max_B, n.splits,
+                        lik.var,
                         stop_rule = 0.05) {
   if (missing(cov)) { cov <- NULL }
   if (missing(B)) { B <- NULL }
@@ -11,8 +12,12 @@ independent <- function(model, y, fit, cov,B, max_B, n.splits,
       n.splits <- n.cores
     }
   }
-
-  Model <- eval(call(model, y, fit, cov))
+  if (!missing(lik.var) & model=="Mcustomize") {
+    Model <- eval(call(model, y, fit, cov, lik.var))
+  } else {
+    Model <- eval(call(model, y, fit, cov))
+  }
+  
   EST <- Model$input$EST
   if (is.null(cov)) { cov <- Model$cov }
   n <- length(y)

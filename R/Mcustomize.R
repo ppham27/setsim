@@ -1,11 +1,17 @@
 Mcustomize <-
-  function(y,fit,cov) {
+  function(y, fit, cov, lik.var) {
     n <- length(y)
 	X <- fit$X
 	EST <- as.vector(fit$EST)
     lik <- fit$lik
-    H.lik <- function(y,X,EST){
-      as.numeric(eval(lik))
+    if (missing(lik.var)) {
+      H.lik <- function(y,X,EST){
+        as.numeric(eval(lik))
+      }
+    } else {
+      H.lik <- function(y,X,EST){
+        as.numeric(eval(lik, lik.var))
+      }      
     }
     max_loglik <- H.lik(y,X,EST)
     input <- list(y=y,X=X,EST=EST,max_loglik=max_loglik)

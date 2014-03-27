@@ -1,5 +1,6 @@
 boundary <-
   function (model, y, fit, target, targetvalue, cov, B, max_B,
+            lik.var,
             n.splits,
             stop_rule = 0.05, ...) {
 
@@ -14,8 +15,12 @@ boundary <-
         n.splits <- n.cores
       }
     }
-
-    Model <- eval(call(model, y, fit, cov))
+    if (!missing(lik.var) & model=="Mcustomize") {
+      Model <- eval(call(model, y, fit, cov, lik.var))
+    } else {
+      Model <- eval(call(model, y, fit, cov))
+    }
+    
     EST <- Model$input$EST
     if (is.null(cov)) { cov <- Model$cov }
     n <- length(y)
