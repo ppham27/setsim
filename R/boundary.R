@@ -22,7 +22,7 @@ boundary <-
     V <- e$vectors %*% diag(sqrt(e$values)) %*% t(e$vectors)
     if (target=="level") { critvalue <- qchisq(targetvalue,p) }
     if (target=="ratio") { critvalue <- -2*log(targetvalue) }
-    if (target=="customized") { critvalue <- cvalue }
+    if (target=="customized") { critvalue <- targetvalue }
 
     boundaryMini <- function(idx, BB, Model) {
       ## returns output, out_wald, soltype, and z
